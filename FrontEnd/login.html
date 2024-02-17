@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Sophie Bluel - Architecte d'intérieur</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap"
+        rel="stylesheet" />
+    <meta name="description" content="Sophie Bluel, Architecte d'intérieur" />
+    <script src="https://kit.fontawesome.com/2a46f23cdb.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="./assets/style.css" />
+</head>
+
+<body class="body-flex">
+    <h2 id="connexionAlert">...</h2>
+    <header>
+        <h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
+        <nav>
+            <div>
+                <a href="index.html#portfolio">projets</a>
+                <a href="index.html#contact">contact</a>
+                <a href="#" style="font-weight: bold;">login</a>
+                <img src="./assets/icons/instagram.png" alt="Instagram" width="20" height="20">
+            </div>
+        </nav>
+    </header>
+    <main class="main-fit-content">
+        <div class="login-container">
+
+            <h2>Log In</h2>
+            <form id="login-form" class="form-primary" method="post" onsubmit="return connexion() ">
+                <label for="email">E-mail</label>
+                <input id="email" class="input-field" type="email" name="email" required value="sophie.bluel@test.tld" />
+                <label for="password">Mot de passe</label>
+                <input id="password" class="input-field" type="password" name="password" required value="S0phie" />
+                <input type="submit" name="submit-login" value="Se connecter" />
+            </form>
+            <a href="#" class="modif">Mot de passe oublié</a>
+        </div>
+    </main>
+    <footer class="foot2">
+        <nav>
+            <ul>
+                <li class="reglage">Mentions Légales</li>
+            </ul>
+        </nav>
+    </footer>
+    <script src="./assets/js/login.js"></script>
+</body>
+
+</html>
