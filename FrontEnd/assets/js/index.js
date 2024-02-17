@@ -1,70 +1,86 @@
+
 const modifier_button = document.getElementById("modifier"); // boutton modifier
 const log = document.getElementById("log"); // boutton login / logout
 const gallery = document.querySelector(".gallery")
 var connexionAlert = document.getElementById("connexionAlert")
+let addOrDeletePhotoAlert = document.getElementById("addOrDeletePhotoAlert"); // afficheur de l'alerte d'ajout ou de suppression de photo
 const categoryContainer = document.getElementById('categories'); // container des categories ou filtre des categories
 const edition = document.querySelector(".edition"); // afficheur du mode édition
 
 var token = "";
-let connected = false; // état de connextion
+var connected = false; // état de connexion
 
-//Fonction pendant qu'on est connectée:
+// Fonction pendant qu'on est connecté :
 const connectedFunction = () => {
-    token = localStorage.getItem('Token'); // récupération du token dans le localstorage
+    token = localStorage.getItem('Token'); // récupération du token dans le localStorage
 
-    // si le token est présent :
+    // Si le token est présent :
     if (token) {
         connected = true;
     }
 
     if (connected) {
-        log.textContent = "logout" // on change le texte du boutton login en logout
-        modifier_button.style.visibility = "visible" // on affiche le boutton modifier
+        log.textContent = "logout"; // on change le texte du bouton login en logout
+        modifier_button.style.visibility = "visible"; // on affiche le bouton modifier
 
-        // affichage de l'alerteur de connexion
-        connexionAlert.style.visibility = "visible";
-        connexionAlert.style.backgroundColor = "rgba(50, 150, 0, 1)";
-        connexionAlert.textContent = "Connecté";
-        // suppression apres 2 secondes
-        setTimeout(function () {
-            connexionAlert.style.visibility = "hidden";
-            edition.style.visibility = "visible";
-        }, 2000);
-
-        // la div de mode édition s'affiche
+        // Affichage de l'alerte de connexion
+        showConnexionAlert("Connecté", "rgba(50, 150, 0, 1)");
+        
+        // La div de mode édition s'affiche
         edition.style.height = "5.5vh";
-        categoryContainer.style.display = "none"
-
+        categoryContainer.style.display = "none";
     } else {
         modifier_button.style.visibility = "hidden";
     }
 
-    //Condition de boutton login et logout
+    // Condition de bouton login et logout
     log.addEventListener("click", function () {
-        //En cas de clique si connecte
+        // En cas de clic, si connecté
         if (connected) {
-            connected = false //Annuler l'etat de connexion
-            localStorage.removeItem('Token') //Suppression du token du localStorage
-            log.textContent = "login" // On remplace logout par login
+            connected = false; // Annuler l'état de connexion
+            localStorage.removeItem('Token'); // Suppression du token du localStorage
+            log.textContent = "login"; // On remplace logout par login
             log.href = "index.html";
 
+            // Affichage de l'alerte de déconnexion
+            showConnexionAlert("Déconnecté", "rgba(255, 0, 0, 1)");
 
-            connexionAlert.style.visibility = "visible";
-            connexionAlert.style.backgroundColor = "rgba(50, 150, 0, 1)";
-            connexionAlert.textContent = "Déconnecté";
-            // suppression apres 2 secondes
-            setTimeout(function () {
-                connexionAlert.style.visibility = "hidden";
-                edition.style.visibility = "hidden";
-            }, 2000);
-            //On fait apparaitre les filtres
+            // On fait apparaitre les filtres
             categoryContainer.style.display = "flex";
-
             edition.style.height = "0";
         } else {
-            window.location.href = "index.html"
+            window.location.href = "index.html";
         }
-    })
+    });
+}
+
+// Fonction pour afficher l'alerte de connexion ou de déconnexion
+const showConnexionAlert = (message, bgColor) =>{
+    connexionAlert.style.visibility = "visible";
+    connexionAlert.style.backgroundColor = bgColor;
+    connexionAlert.style.display = "flex";
+    connexionAlert.textContent = message;
+    // Suppression après 2 secondes
+    setTimeout(() => {
+        connexionAlert.style.visibility = "hidden";
+        edition.style.visibility = "visible";
+        setTimeout(() => {
+            connexionAlert.style.display = "none";
+        }, 200); // Temps légèrement inférieur pour s'assurer que la transition est douce
+    }, 2000);
+}
+
+// Fonction pour afficher l'alerte de suppression ou d'ajout de photo
+const showPhotoAlert = (message, bgColor) => {
+    addOrDeletePhotoAlert.style.visibility = "visible";
+    addOrDeletePhotoAlert.style.backgroundColor = bgColor;
+    addOrDeletePhotoAlert.style.display = "flex";
+    addOrDeletePhotoAlert.textContent = message;
+    // Suppression après 2 secondes
+    setTimeout(() => {
+        addOrDeletePhotoAlert.style.visibility = "hidden";
+        edition.style.visibility = "visible";
+    }, 10000);
 }
 
 connectedFunction();
@@ -276,6 +292,7 @@ const modifier = async () => {
 
             trash[dataGroup.id].addEventListener("click", function () {
                 deleteData(urlId);
+                deletePhoto(urlId);
             })
 
 
@@ -289,6 +306,7 @@ const modifier = async () => {
 //Pour supprimer une image des travaux
 
 const deleteData = async (urlId) => {
+
     try {
         let response = await fetch(urlId, {
             method: 'DELETE',
@@ -312,6 +330,23 @@ const deleteData = async (urlId) => {
 
 }
 
+ 
+
+// Fonction pour supprimer une photo
+const deletePhoto = (photoId) => {
+    // Code pour supprimer la photo avec l'ID spécifié
+
+    // Affichage de l'alerte de suppression de photo
+    showPhotoAlert("Photo supprimée", "rgba(255, 0, 0, 1)");
+};
+
+// Fonction pour ajouter une photo
+const addPhoto = (photoData) => {
+    // Code pour ajouter la photo avec les données spécifiées
+
+    // Affichage de l'alerte d'ajout de photo
+    showPhotoAlert("Photo ajoutée", "rgba(50, 150, 0, 1)");
+};
 
 // Pour afficher les options des catégories
 let options = []
@@ -400,41 +435,40 @@ const dataURLtoBlob = (dataurl) => {
     return new Blob([u8arr], { type: mime });
 };
 
-//Gestionnaire pour la validation de l'ajout d'une image
+
 add_validate.addEventListener("click", () => {
     if (urlImg && titre_select.value != "") {
-        var blobImg = dataURLtoBlob(urlImg)
+        var blobImg = dataURLtoBlob(urlImg); // Assurez-vous que cette fonction est définie pour convertir dataURL en Blob
         let formData = new FormData();
-        //On s"assure que c'est un objet File ou Blob
-        formData.append("image", blobImg)
-        formData.append("title", titre_select.value)
-        formData.append("category", categorie_select.selectedIndex)
-        //
+        formData.append("image", blobImg); // Assurez-vous que c'est bien un objet Blob
+        formData.append("title", titre_select.value);
+        formData.append("category", categorie_select.selectedIndex); // Assurez-vous que `categorie_select` est bien défini
 
         fetch('http://localhost:5678/api/works', {
             method: 'POST',
             body: formData,
             headers: {
                 'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${token}` // Assurez-vous que `token` est bien défini et valide
             }
         })
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`Erreur HTTP, statut : ${response.status}`);
                 }
-                getWorks();
-                modifier();
-                add_work.style.display = "none";
-                modifier_interface.style.display = "none";
-                console.log(response.json());
-            })//un indicateur ou booléen qui sera à true si on ajoute une photo
-
+                return response.json(); // Convertit la réponse en JSON si la requête est réussie
+            })
+            .then(photoData => {
+                getWorks(); //  Définie pour récupérer les photos
+                modifier(); // Est définie pour ajuster l'interface utilisateur selon besoin
+                addPhoto(photoData); // Utilisez ici les données de la photo ajoutée
+                add_work.style.display = "none"; // Assurez-vous que `add_work` est bien défini
+                modifier_interface.style.display = "none"; // Assurez-vous que `modifier_interface` est bien défini
+            })
             .catch(error => console.error('Erreur lors de la requête fetch:', error));
     }
     else {
-        console.log("information manquante");
+        console.log("Information manquante");
     }
-})
-
+});
 
