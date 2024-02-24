@@ -399,8 +399,8 @@ add_button.addEventListener("click", () => {
 add_img_input.addEventListener("change", function (event) {
     var file = event.target.files[0];
     if (file && file.size <= 4 * 1024 * 1024) { // 4MB max
-        var reader = new FileReader();
-        reader.onload = function (e) {
+        var reader = new FileReader();/* permet à des applications web de lire le contenu de fichiers  de facon asynchrone*/ 
+        reader.onload = function (e) { /*permet d'appeler le chargement*/ 
             imgPreview.src = e.target.result; // Mise à jour de l'aperçu de l'image
             urlImg = e.target.result; // Stockage de l'URL de l'image
             choose_photo.style.display = "none";
@@ -408,7 +408,7 @@ add_img_input.addEventListener("change", function (event) {
 
             updateValidateButtonState(); // Mise à jour de l'état du bouton ici
         };
-        reader.readAsDataURL(file);
+        reader.readAsDataURL(file); /* utilisée afin de lire le contenu d'un blob */ 
         this.value = ""; // Réinitialisation après le chargement
     } else {
         alert("Le fichier est trop volumineux. Veuillez sélectionner un fichier de moins de 4 Mo.");
