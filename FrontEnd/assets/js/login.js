@@ -1,9 +1,14 @@
+    /*Le script attend que le DOM soit completement charge avant 
+    d'ajouter l'ecouteur d'evenement de soumission du formulaire */
+document.addEventListener("DOMContentLoaded", function() { 
 const form = document.getElementById("login-form")
 const connexionAlert = document.getElementById("connexionAlert")
 
-form.addEventListener("submit",function (e) {
+form.addEventListener("submit",async function (e) {
     //Empeche le comportement par defaut du formulaire
-    e.preventDefault();
+    e.preventDefault(); 
+    //Appelle la methode connexion
+    await connexion();
 })
 const connexion = async() => {
     let email = document.getElementById("email").value; 
@@ -49,3 +54,4 @@ const connexion = async() => {
     }
 
 }
+})

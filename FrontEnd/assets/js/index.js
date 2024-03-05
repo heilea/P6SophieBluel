@@ -1,7 +1,7 @@
 
 const modifier_button = document.getElementById("modifier"); // boutton modifier
 const log = document.getElementById("log"); // boutton login / logout
-const gallery = document.querySelector(".gallery")
+var gallery = document.querySelector(".gallery")
 var connexionAlert = document.getElementById("connexionAlert")
 let addOrDeletePhotoAlert = document.getElementById("addOrDeletePhotoAlert"); // afficheur de l'alerte d'ajout ou de suppression de photo
 const categoryContainer = document.getElementById('categories'); // container des categories ou filtre des categories
@@ -323,6 +323,7 @@ const deleteData = async (urlId) => {
         console.error('error deleting work:', error)
         throw new Error(`api error status with status code ${response.status}`)
     }
+    gallery.innerHTML=""; // Pour vider le container
     //Pour mettre à jour la galerie
     modifier();
     getWorks();
@@ -353,6 +354,10 @@ let options = []
 const addCategoryOption = async () => {
     try {
         const selectedElement = document.getElementById("categorie");
+        //On verifie si les options ont deja ete ajoute
+        if(selectedElement.length > 0){
+            return ; //On arrete l'execution du script si des options existe deja
+        }
         //On créer une option par défaut
         const defaultOption = document.createElement("option");
         defaultOption.textContent = ""
@@ -398,7 +403,13 @@ add_button.addEventListener("click", () => {
 
 add_img_input.addEventListener("change", function (event) {
     var file = event.target.files[0];
-    if (file && file.size <= 4 * 1024 * 1024) { // 4MB max
+    const ACCEPTED_EXTENSIONS = ["png","jpg"];
+    const fileName = file.name;
+    const extension = fileName.split(".").pop().toLowerCase() //Pour extraire l'extension ou le type de fichier
+    if (file && file.size <= 4 * 1024 * 1024 && ACCEPTED_EXTENSIONS.includes(extension)) { // 4MB max
+        console.log(file.type)
+        console.log(file.name)
+        console.log(extension)
         var reader = new FileReader();/* permet à des applications web de lire le contenu de fichiers  de facon asynchrone*/ 
         reader.onload = function (e) { /*permet d'appeler le chargement*/ 
             imgPreview.src = e.target.result; // Mise à jour de l'aperçu de l'image
@@ -459,6 +470,7 @@ add_validate.addEventListener("click", () => {
                 return response.json(); // Convertit la réponse en JSON si la requête est réussie
             })
             .then(photoData => {
+                gallery.innerHTML = "";//Pour vider le container
                 getWorks(); //  Définie pour récupérer les photos
                 modifier(); // Est définie pour ajuster l'interface utilisateur selon besoin
                 addPhoto(photoData); // Utilisez ici les données de la photo ajoutée

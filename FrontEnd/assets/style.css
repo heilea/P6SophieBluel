@@ -253,6 +253,10 @@ footer nav ul {
 	margin: 2em
 }
 
+.foot2{
+	
+}
+
 /*CSS login*/
 
 #connexionAlert {
@@ -363,6 +367,9 @@ a:hover {
 	color: #B1663C;
 }
 
+.reglage{
+	margin-top: 127px;
+}
 /*CSS modal*/
 
 .modal {
@@ -398,44 +405,6 @@ a:hover {
 
 .modal[aria-hidden='true'] .modal-wrapper {
 	animation-name: zoomOut;
-}
-
-/* Modal open and close animations */
-
-@keyframes fadeIn {
-	from {
-		opacity: 0;
-	}
-	to {
-		opacity: 1;
-	}
-}
-
-@keyframes fadeOut {
-	from {
-		opacity: 1;
-	}
-	to {
-		opacity: 0;
-	}
-}
-
-@keyframes zoomIn {
-	from {
-		transform: scale(0.5);
-	}
-	to {
-		transform: scale(1);
-	}
-}
-
-@keyframes zoomOut {
-	from {
-		transform: scale(1);
-	}
-	to {
-		transform: scale(0.5);
-	}
 }
 
 #gallery-modal-container,
@@ -766,9 +735,7 @@ a:hover {
 		cursor: pointer;
 	}
 	
-	.modifier_interface .add_work{
-		
-	}
+
 	.modifier_interface .add_work .add_photo{
 		background-color: #E8F1F6;
 		border-radius: 5px;
